@@ -1,3 +1,3 @@
 public interface IPostfixCalculator {
-    int evaluate(String expression);
+    double evaluate(String expression);
 }

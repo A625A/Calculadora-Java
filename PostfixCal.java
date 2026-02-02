@@ -1,10 +1,10 @@
 public class PostfixCal implements IPostfixCalculator {
-    private IStack<Integer> stack;
+    private IStack<Double> stack;
     
-    public PostfixCal(IStack<Integer> stack) {
+    public PostfixCal(IStack<Double> stack) {
         this.stack = stack;
     }
-    public int evaluate(String expression) {
+    public double evaluate(String expression) {
         if (expression == null) {
             throw new RuntimeException("Expresion nula");
         }
@@ -18,12 +18,12 @@ public class PostfixCal implements IPostfixCalculator {
                 if (stack.size() < 2) {
                     throw new RuntimeException("Operandos insuficientes");
                 }
-                int b = stack.pop();
-                int a = stack.pop();
-                int result = applyOperator(a, b, token);
+                double b = stack.pop();
+                double a = stack.pop();
+                double result = applyOperator(a, b, token);
                 stack.push(result);
             } else {
-                stack.push(Integer.parseInt(token));
+                stack.push(Double.parseDouble(token));
             }
         }
         return stack.pop();
@@ -31,7 +31,7 @@ public class PostfixCal implements IPostfixCalculator {
     private boolean isOperator(String token) {
         return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/");
     }
-    private int applyOperator(int a, int b, String op) {
+    private double applyOperator(double a, double b, String op) {
         switch (op) {
             case "+":
                 return a + b;
@@ -47,5 +47,14 @@ public class PostfixCal implements IPostfixCalculator {
             default:
                 throw new IllegalArgumentException("Operador inválido: " + op);
         }
+    }
+
+    public static void main(String[] args) {
+        IStack<Double> stack = new Vstack<>();
+        PostfixCal calc = new PostfixCal(stack);
+        String expresion = args.length > 0 ? String.join(" ", args) : "2 12.56 + 5 /";
+        double resultado = calc.evaluate(expresion);
+        System.out.println("Expresion: " + expresion);
+        System.out.println("Resultado: " + resultado);
     }
 }
